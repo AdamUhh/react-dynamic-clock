@@ -1,15 +1,21 @@
 import { useState, useEffect} from 'react'
 
-const UserTime = () => {
+const UserTime = ({setCurrentTime}) => {
     const [userTime, setUserTime] = useState(new Date());
 
     useEffect(() => {
-        setTimeout(showTime, 1000);
-    });
+        const interval = setInterval(() => {
+            showTime()
+        }, 1000);
+
+        return () => clearInterval(interval); //This is important
+    }, [userTime]);
 
     function showTime() {
+
         var a_p = '';
         var today = new Date();
+        setCurrentTime(today);
         var current_hour = today.getHours();
 
         a_p = current_hour < 12 ? 'AM' : 'PM';
