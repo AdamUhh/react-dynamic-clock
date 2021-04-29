@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {auth} from './base';
+import { auth } from './base';
 
 export const AuthContext = React.createContext();
 
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider
             value={{
-                currentUser
+                currentUser,
             }}
         >
             {children}

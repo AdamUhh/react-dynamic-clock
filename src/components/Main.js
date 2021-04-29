@@ -30,6 +30,7 @@ const Main = ({ time, confirmedTZ, setConfirmedTZ, currentTime }) => {
         }, 1000);
 
         return () => clearInterval(interval); //This is important
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTime, time]);
 
     function deleteTZ() {

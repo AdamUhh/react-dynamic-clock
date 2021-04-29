@@ -32,6 +32,7 @@ export const Home = () => {
 
     useEffect(() => {
         if (currentUser) fetchBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

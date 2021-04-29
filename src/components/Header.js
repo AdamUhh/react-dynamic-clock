@@ -19,7 +19,6 @@ const Header = ({ confirmedTZ, setConfirmedTZ }) => {
     const onSubmit = (e) => {
         e.preventDefault();
         if (selectedTZ) {
-            console.log(selectedTZ)
             setConfirmedTZ([...confirmedTZ, selectedTZ]);
             selectInputRef.current.clearAll();
 
