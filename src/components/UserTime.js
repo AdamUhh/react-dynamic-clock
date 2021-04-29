@@ -1,18 +1,19 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect } from 'react';
+import Stopwatch from './Stopwatch';
 
-const UserTime = ({setCurrentTime}) => {
+const UserTime = ({ setCurrentTime }) => {
     const [userTime, setUserTime] = useState(new Date());
 
     useEffect(() => {
         const interval = setInterval(() => {
-            showTime()
+            showTime();
         }, 1000);
 
         return () => clearInterval(interval); //This is important
-    }, [userTime]);
+    }, [showTime]); // updated every 1 second from showTime()
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function showTime() {
-
         var a_p = '';
         var today = new Date();
         setCurrentTime(today);
@@ -47,28 +48,39 @@ const UserTime = ({setCurrentTime}) => {
             return text;
         }
     }
+    function btnHandler() {
+        document.querySelector('.stopwatch-container').classList.toggle('display');
+    }
 
     return (
         <div className='locale-container container'>
-                <div className='locale-body'>
-                    <div className='locale-wrapper'>
-                        <div className='locale-time'>{userTime[0]}</div>
-                        {userTime[1] === 'AM' ? (
-                            <div className='locale-ampm'>
-                                <p>{userTime[1]}</p>
-                                <span className='faded'>PM</span>
-                            </div>
-                        ) : (
-                            <div className='locale-ampm'>
-                                <p className='faded'>AM</p>
-                                <span>{userTime[1]}</span>
-                            </div>
-                        )}
-                    </div>
-                    <div className='locale-date'>{userTime[2]}</div>
+            <div className='locale-body'>
+                <div className='locale-wrapper'>
+                    <div className='locale-time'>{userTime[0]}</div>
+                    {userTime[1] === 'AM' ? (
+                        <div className='locale-ampm'>
+                            <p>{userTime[1]}</p>
+                            <span className='faded'>PM</span>
+                        </div>
+                    ) : (
+                        <div className='locale-ampm'>
+                            <p className='faded'>AM</p>
+                            <span>{userTime[1]}</span>
+                        </div>
+                    )}
                 </div>
+                <div className='locale-date'>{userTime[2]}</div>
             </div>
-    )
-}
+            <div className='stopwatch-icon' >
+                <svg onClick={btnHandler} xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 1792 1792'>
+                    <path d='M1024 544v448q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h224v-352q0-14 9-23t23-9h64q14 0 23 9t9 23zm416 352q0-148-73-273t-198-198-273-73-273 73-198 198-73 273 73 273 198 198 273 73 273-73 198-198 73-273zm224 0q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z' />
+                </svg>
+            </div>
+            <hr />
 
-export default UserTime
+            <Stopwatch />
+        </div>
+    );
+};
+
+export default UserTime;

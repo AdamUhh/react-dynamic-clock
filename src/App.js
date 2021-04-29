@@ -1,25 +1,20 @@
-import './App.css';
-import Main from './components/Main';
-import Header from './components/Header';
-import UserTime from './components/UserTime';
-import { useState} from 'react';
+// import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Home from './firestore/Home';
+import Login from './firestore/Login';
+import { AuthProvider } from './firestore/Auth';
+import PrivateRoute from './firestore/PrivateRoute';
 
 function App() {
-    const [confirmedTZ, setConfirmedTZ] = useState([]);
-    const [currentTime, setCurrentTime] = useState([]);
-
     return (
-        <div className='App'>
-                <Header confirmedTZ={confirmedTZ} setConfirmedTZ={setConfirmedTZ} />
-                <UserTime setCurrentTime={setCurrentTime}/>
-                <div className='display-container container'>
-                    {confirmedTZ
-                        .filter((time) => time !== null)
-                        .map((time, index) => (
-                            <Main key={index} time={time} currentTime={currentTime}/>
-                        ))}
+        <AuthProvider>
+            <Router>
+                <div>
+                    <PrivateRoute exact path='/' component={Home} />
+                    <Route exact path='/login' component={Login} />
                 </div>
-        </div>
+            </Router>
+        </AuthProvider>
     );
 }
 
