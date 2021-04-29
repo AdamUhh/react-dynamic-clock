@@ -30,7 +30,7 @@ const Main = ({ time, confirmedTZ, setConfirmedTZ, currentTime }) => {
         }, 1000);
 
         return () => clearInterval(interval); //This is important
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTime, time]);
 
     function deleteTZ() {
@@ -38,12 +38,14 @@ const Main = ({ time, confirmedTZ, setConfirmedTZ, currentTime }) => {
         setConfirmedTZ(deletedTZ);
 
         //update firebase
-        firestore
-            .collection('Users')
-            .doc(currentUser.uid)
-            // .collection('StoredTimezones')
-            // .doc('dummy')
-            .update({ storedTZ: deletedTZ });
+        if (currentUser) {
+            firestore
+                .collection('Users')
+                .doc(currentUser.uid)
+                // .collection('StoredTimezones')
+                // .doc('dummy')
+                .update({ storedTZ: deletedTZ });
+        }
     }
 
     return (
