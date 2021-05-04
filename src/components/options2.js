@@ -138,7 +138,7 @@ export const options = [
 { "label": "(GMT+03:00) Africa/Nairobi", "value":"Africa/Nairobi"},
 { "label": "(GMT+03:00) Antarctica/Syowa", "value":"Antarctica/Syowa"},
 { "label": "(GMT+03:00) Asia/Aden", "value":"Asia/Aden"},
-{ "label": "(GMT+03:00) Asia/Amman", "value":"Asia/Amman"},
+{ "label": "(GMT+03:00) Asia/Amman/Jordan", "value":"Asia/Amman"},
 { "label": "(GMT+03:00) Asia/Baghdad", "value":"Asia/Baghdad"},
 { "label": "(GMT+03:00) Asia/Bahrain", "value":"Asia/Bahrain"},
 { "label": "(GMT+03:00) Asia/Beirut", "value":"Asia/Beirut"},

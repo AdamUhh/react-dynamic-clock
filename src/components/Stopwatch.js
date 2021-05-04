@@ -14,7 +14,7 @@ const Stopwatch = ({ startedOn }) => {
             setStatus(1);
             setInterv(setInterval(run, 1000));
             document.querySelector('#start').classList.toggle('stop');
-            getCurrentTime();
+            if (timeStartedOn.length < 1) getCurrentTime();
         } else {
             clearInterval(interv);
             setStatus(2);
