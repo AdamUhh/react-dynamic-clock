@@ -11,7 +11,7 @@ export const Home = () => {
     const [currentTime, setCurrentTime] = useState([]);
     const { currentUser } = useContext(AuthContext);
 
-    const fetchBlogs = async () => {
+    const fetchTime = async () => {
         // firestore
         //     .collection('Users')
         //     .doc(currentUser.uid)
@@ -31,15 +31,17 @@ export const Home = () => {
     };
 
     useEffect(() => {
-        if (currentUser) fetchBlogs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (currentUser) fetchTime();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div className='App'>
             {/* CHECK IF ITS BECAUSE CONFIRMEDTZ LENGTH IS FASTER THAN USERTIME! */}
             <Header confirmedTZ={confirmedTZ} setConfirmedTZ={setConfirmedTZ} />
-            <UserTime setCurrentTime={setCurrentTime} />
+            <UserTime currentTime={currentTime} setCurrentTime={setCurrentTime} />
+
+
             {confirmedTZ.length > 0 && currentTime > 0 && (
                 <>
                     <div className='display-container container'>

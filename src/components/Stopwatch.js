@@ -1,70 +1,79 @@
-import { useState } from 'react';
-const Stopwatch = ({ startedOn }) => {
-    const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
-    const [interv, setInterv] = useState();
-    const [status, setStatus] = useState(2);
+import { useState, useEffect } from 'react';
+const Stopwatch = (props) => {
+    const [status, setStatus] = useState(0); // stopped = 0, started = 1
+    const [OGTimeStartedOn, setOGTimeStartedOn] = useState('');
+
     const [timeStartedOn, setTimeStartedOn] = useState('');
-    // started = 1
-    // stopped = 2
+    const [elapsedTime, setElapsedTime] = useState(0);
+
+    const [stopwatchTime, setStopwatchTime] = useState('00:00:00');
+
+    useEffect(() => {
+        if (status === 1) {
+            let t = props.currentTime.getTime() - timeStartedOn; //Average is around 1010-1020ms
+            setElapsedTime(elapsedTime + ((t < 1100) ? 1000 : t));
+            setTimeStartedOn(Date.now());
+            updateStopwatch();
+        }
+    }, [props.currentTime, status]);
+
+    const updateStopwatch = () => {
+        // console.log(elapsedTime);
+        let tempTime = elapsedTime;
+        tempTime = Math.floor(tempTime / 1000);
+        let s = tempTime % 60;
+        tempTime = Math.floor(tempTime / 60);
+        let m = tempTime % 60;
+        tempTime = Math.floor(tempTime / 60);
+        let h = tempTime % 60;
+
+        setStopwatchTime(`${checkTime(h)}:${checkTime(m)}:${checkTime(s)}`);
+    };
 
     const startStop = () => {
-        if (status === 2) {
+        if (status === 0) {
             //if clock is not running and user presses start, run() every 1 second
-            run();
+            if (OGTimeStartedOn.length < 1) getCurrentTime();
+            setTimeStartedOn(props.currentTime.getTime());
+
             setStatus(1);
-            setInterv(setInterval(run, 1000));
+
             document.querySelector('#start').classList.toggle('stop');
-            if (timeStartedOn.length < 1) getCurrentTime();
         } else {
-            clearInterval(interv);
-            setStatus(2);
+            setTimeStartedOn(props.currentTime.getTime());
+
+            setStatus(0);
+
             document.querySelector('#start').classList.toggle('stop');
         }
     };
 
     const reset = () => {
-        clearInterval(interv);
-        setStatus(2);
-        setTime({ s: 0, m: 0, h: 0 });
+        setStatus(0);
+        setElapsedTime(0);
+        setTimeStartedOn(0);
+        setStopwatchTime(`00:00:00`);
+
         //If you click reset while the clock is working, toggle the class 'stop' to make it turn back to green
         if (document.querySelector('#start').classList.contains('stop')) document.querySelector('#start').classList.toggle('stop');
-        if (timeStartedOn.length > 0) setTimeStartedOn('')
-    };
-
-    var updatedS = time.s,
-        updatedM = time.m,
-        updatedH = time.h;
-
-    const run = () => {
-        updatedS++;
-
-        // If seconds reach 60s, reset it to 0 and add 1 to minutes
-        if (updatedS === 60) {
-            updatedM++;
-            updatedS = 0;
-        }
-
-        // If minutes reach 60m, reset it to 0 and add 1 to hours
-        if (updatedM === 60) {
-            updatedH++;
-            updatedM = 0;
-        }
-
-        return setTime({ s: updatedS, m: updatedM, h: updatedH });
+        if (OGTimeStartedOn.length > 0) setOGTimeStartedOn('');
     };
 
     const getCurrentTime = () => {
         let time = new Date();
         let THour = time.getHours();
+        let a_p = '';
 
         if (THour === 0) {
             THour = 12;
+            a_p = 'am';
         }
         if (THour > 12) {
             THour = THour - 12;
+            a_p = 'pm';
         }
-
-        setTimeStartedOn(`${checkTime(THour)}:${checkTime(time.getMinutes())}:${checkTime(time.getSeconds())}`);
+        setOGTimeStartedOn(`${checkTime(THour)}:${checkTime(time.getMinutes())}:${checkTime(time.getSeconds())} ${a_p}`);
+        // setTimeStartedOn(time.getTime());
     };
 
     function checkTime(i) {
@@ -74,10 +83,18 @@ const Stopwatch = ({ startedOn }) => {
 
     return (
         <div className='stopwatch-container container'>
-            <div className='stopwatch-startedOn'>{timeStartedOn.length > 0 && <span>Started at<br/>{timeStartedOn}</span>} </div>
+            <div className='stopwatch-startedOn'>
+                {OGTimeStartedOn.length > 0 && (
+                    <span>
+                        Started at
+                        <br />
+                        {OGTimeStartedOn}
+                    </span>
+                )}
+            </div>
             <div id='stopwatch-time'>
-                <span id='hour'>{time.h < 10 ? `0${time.h}` : `${time.h}`}</span> :<span id='min'> {time.m < 10 ? `0${time.m}` : `${time.m}`}</span> :
-                <span id='sec'> {time.s < 10 ? `0${time.s}` : `${time.s}`}</span>
+                <span id='hour'>{stopwatchTime}</span>
+                {/* <span id='min'>:</span> :<span id='sec'></span> */}
             </div>
 
             <ul className='stopwatch-options'>
