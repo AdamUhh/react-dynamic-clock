@@ -10,15 +10,15 @@ const Stopwatch = (props) => {
 
     useEffect(() => {
         if (status === 1) {
-            let t = props.currentTime.getTime() - timeStartedOn; //Average is around 1010-1020ms
-            // console.log("time "+t)
-            setElapsedTime(elapsedTime + ((t < 1000) ? 1000 : t+15));
+            let t = props.currentTime.getTime() - timeStartedOn;
+            setTimeStartedOn(Date.now());
+            setElapsedTime(elapsedTime + (t < 1000 ? 1000 : t + 6));
+
             // setElapsedTime(elapsedTime + ((t < 1000) ? 1000 : Math.round(t/1000)*1000));
             // console.log("Rounded "+Math.round(t/1000)*1000)
-            setTimeStartedOn(Date.now());
             updateStopwatch();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.currentTime, status]);
 
     const updateStopwatch = () => {
